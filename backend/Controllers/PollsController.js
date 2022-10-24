@@ -1,6 +1,6 @@
-const mongo = require ('../Database.js')
+const mongo = require('../Database.js')
 const { MongoClient } = require("mongodb");
- 
+
 // Replace the following with your Atlas connection string                                                                                                                                        
 const url = "mongodb+srv://Admin:omF2Vr1IlQFj7tcr@polltrackercluster.oke1med.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(url);
@@ -11,7 +11,7 @@ async function Connect() {
         const db = client.db("PollTrackerCluster");
 
         // Use the collection "people"
-        return(db.collection("polls"));
+        return (db.collection("polls"));
 
     } catch (err) {
         console.log(err.stack);
@@ -19,49 +19,53 @@ async function Connect() {
 }
 
 
-async function AddPoll() {
+module.exports = {
+    async AddPoll(req, res) {
 
-    const collection = await Connect();
+        console.log(req.params)
 
-    try {
-        //construct a document
-        let pollDocument = {
-            "Source": "YouGov",
-            "DatePublished": new Date(2022, 10, 21),
-            "SurveyDate": { "StartDate": null, "EndDate": null },
-            "ChangesWith": null,
-            "Data": [
-                {
-                    "Party": "CON",
-                    "Points": 19,
-                },
-                {
-                    "Party": "LAB",
-                    "Points": 56,
-                },
-                {
-                    "Party": "LDEM",
-                    "Points": 10,
-                },
-                {
-                    "Party": "GRN",
-                    "Points": 4,
-                },
-                {
-                    "Party": "REF",
-                    "Points": 5,
-                }
-            ]
+        const collection = await Connect();
+
+        /* try {
+            //construct a document
+            let pollDocument = {
+                "Source": "YouGov",
+                "DatePublished": new Date(2022, 10, 21),
+                "SurveyDate": { "StartDate": null, "EndDate": null },
+                "ChangesWith": null,
+                "Data": [
+                    {
+                        "Party": "CON",
+                        "Points": 19,
+                    },
+                    {
+                        "Party": "LAB",
+                        "Points": 56,
+                    },
+                    {
+                        "Party": "LDEM",
+                        "Points": 10,
+                    },
+                    {
+                        "Party": "GRN",
+                        "Points": 4,
+                    },
+                    {
+                        "Party": "REF",
+                        "Points": 5,
+                    }
+                ]
+            }
+
+            // Insert a single document, wait for promise so we can read it back
+            const doc = await collection.insertOne(pollDocument);
+        } catch (err) {
+            console.log(err.stack);
         }
+        finally {
+            await client.close();
+        } */
+    }
 
-        // Insert a single document, wait for promise so we can read it back
-        const doc = await collection.insertOne(pollDocument);
-    } catch (err) {
-        console.log(err.stack);
-    }
-    finally {
-        await client.close();
-    }
 }
 
-AddPoll().catch(console.dir);
