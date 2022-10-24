@@ -1,4 +1,3 @@
-const mongo = require('../Database.js')
 const { MongoClient } = require("mongodb");
 
 // Replace the following with your Atlas connection string                                                                                                                                        
@@ -22,39 +21,18 @@ async function Connect() {
 module.exports = {
     async AddPoll(req, res) {
 
-        console.log(req.params)
+        console.log(req.body)
 
         const collection = await Connect();
 
-        /* try {
+         try {
             //construct a document
             let pollDocument = {
-                "Source": "YouGov",
-                "DatePublished": new Date(2022, 10, 21),
-                "SurveyDate": { "StartDate": null, "EndDate": null },
-                "ChangesWith": null,
-                "Data": [
-                    {
-                        "Party": "CON",
-                        "Points": 19,
-                    },
-                    {
-                        "Party": "LAB",
-                        "Points": 56,
-                    },
-                    {
-                        "Party": "LDEM",
-                        "Points": 10,
-                    },
-                    {
-                        "Party": "GRN",
-                        "Points": 4,
-                    },
-                    {
-                        "Party": "REF",
-                        "Points": 5,
-                    }
-                ]
+                "Source": req.body.source,
+                "DatePublished": new Date(req.body.datePublished),
+                "SurveyDate": { "StartDate": new Date(req.body.startDate), "EndDate": new Date(req.body.endDate) },
+                "ChangesWith": new Date(req.body.changesWith),
+                "Data": req.body.parties
             }
 
             // Insert a single document, wait for promise so we can read it back
@@ -64,7 +42,7 @@ module.exports = {
         }
         finally {
             await client.close();
-        } */
+        } 
     }
 
 }
