@@ -9,13 +9,10 @@ function Admin() {
 
     const [partyComponents, setPartyComponents] = useState([]);
 
-    useEffect(() => {
-        console.log("useEffect called")
-    }, [])
-
-
+    //runs when + button is clicked
     function addParty() {
-        console.log("addParty called")
+
+        //create a temp object and push a new party component to it
         let newPartyComponents = partyComponents;
 
         newPartyComponents.push(<Box key={partyComponents.length}>
@@ -35,13 +32,15 @@ function Admin() {
             </FormControl>
         </Box>)
 
+        //update state 
         setPartyComponents([...newPartyComponents]);
-
-        console.log(partyComponents)
     }
 
+    //Handles form submit 
     async function submitForm(e) {
-        e.preventDefault();
+        e.preventDefault(); //prevent refresh
+
+        //get the form data
         let source = e.target.source.value;
         let datePublished = e.target.datepublished.value;
         let startDate = e.target.startdate.value;
