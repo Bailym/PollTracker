@@ -1,10 +1,15 @@
 const { MongoClient } = require("mongodb");
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 // Replace the following with your Atlas connection string                                                                                                                                        
-const url = "mongodb+srv://Admin:omF2Vr1IlQFj7tcr@polltrackercluster.oke1med.mongodb.net/?retryWrites=true&w=majority";
+var url = process.env.MONGO_URL;
 const client = new MongoClient(url);
 
+
 async function Connect() {
+
+    console.log(url)
     try {
         await client.connect();
         const db = client.db("PollTrackerCluster");
@@ -21,12 +26,10 @@ async function Connect() {
 module.exports = {
     async AddPoll(req, res) {
 
-        console.log(req.body)
-
-        const collection = await Connect();
+        const collection = await Connect(); //connect to the database
 
          try {
-            //construct a document
+            //construct a document with poll details
             let pollDocument = {
                 "Source": req.body.source,
                 "DatePublished": new Date(req.body.datePublished),

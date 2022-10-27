@@ -3,7 +3,6 @@ const app = express()
 const port = 3001
 const path = require('path')
 var bodyParser = require('body-parser');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
