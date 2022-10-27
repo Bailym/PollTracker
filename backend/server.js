@@ -14,8 +14,6 @@ var pollsController = require("./Controllers/PollsController");
 
 //Polls endpoints
 app.post('/api/polls/add', pollsController.AddPoll);  //retrieves all users
-//app.get('/api/polls/:id', pollsController);  //retrieves specific user by id
-
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
 
