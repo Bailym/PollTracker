@@ -9,7 +9,6 @@ const client = new MongoClient(url);
 
 async function Connect() {
 
-    console.log(url)
     try {
         await client.connect();
         const db = client.db("PollTrackerCluster");
@@ -39,7 +38,7 @@ module.exports = {
             }
 
             // Insert a single document, wait for promise so we can read it back
-            const doc = await collection.insertOne(pollDocument);
+            await collection.insertOne(pollDocument);
         } catch (err) {
             console.log(err.stack);
         }
