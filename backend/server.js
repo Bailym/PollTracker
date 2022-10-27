@@ -12,7 +12,8 @@ app.use(bodyParser.json());
 var pollsController = require("./Controllers/PollsController");
 
 //Polls endpoints
-app.post('/api/polls/add', pollsController.AddPoll);  //retrieves all users
+app.post('/api/polls/add', pollsController.AddPoll);  //adds a new poll
+app.get('/api/polls/get/:id', pollsController.GetPoll);  //retreives a poll by id
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
 

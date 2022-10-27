@@ -1,4 +1,5 @@
 const { MongoClient } = require("mongodb");
+var ObjectId = require('mongodb').ObjectId; 
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
@@ -27,7 +28,7 @@ module.exports = {
 
         const collection = await Connect(); //connect to the database
 
-         try {
+        try {
             //construct a document with poll details
             let pollDocument = {
                 "Source": req.body.source,
@@ -44,7 +45,27 @@ module.exports = {
         }
         finally {
             await client.close();
-        } 
+        }
+    },
+
+    async GetPoll(req, res) {
+        const collection = await Connect(); //connect to the database
+        try{
+
+            // Find the poll with the id from the GET request 
+            const myDoc = await collection.findOne({"_id": ObjectId(req.params.id)});
+
+            //send it back to the client
+            res.send(myDoc);
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
+        finally {
+            await client.close();
+        }
+
+
     }
 
 }
