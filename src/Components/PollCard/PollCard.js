@@ -10,7 +10,7 @@ function PollCard(props) {
             <BarChart
                 width="100%"
                 height="100%"
-                data={props.data}
+                data={props.data.Data}
                 margin={{
                     top: 20,
                     right: 30,
@@ -18,11 +18,9 @@ function PollCard(props) {
                     bottom: 0,
                 }}
             >
-                <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="Party" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
                 <Bar dataKey="Points" fill="#82ca9d" />
             </BarChart>
         </ResponsiveContainer>)
