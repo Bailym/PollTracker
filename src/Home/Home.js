@@ -35,7 +35,7 @@ function Home() {
 
   return (
     <Flex>
-      <Box flex="2" height="92vh" margin="2vh" bgColor="#E5F3F4">
+      <Box flex="2" height="92vh" margin="2vh" bgColor="#E5F3F4" overflowY="scroll">
         {pollCards}
       </Box>
       <Box flex="4" margin="2vh">
