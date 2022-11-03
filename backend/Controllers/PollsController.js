@@ -71,7 +71,7 @@ module.exports = {
         try{
 
             // Find all the polls
-            const pollDocs = await collection.find({}).toArray();
+            const pollDocs = await collection.find({}).sort({"DatePublished":-1}).toArray();
 
             //send polls back to the client
             res.send(pollDocs);
