@@ -64,8 +64,25 @@ module.exports = {
         finally {
             await client.close();
         }
+    },
 
+    async GetAllPolls(req, res) {
+        const collection = await Connect(); //connect to the database
+        try{
 
+            // Find all the polls
+            const pollDocs = await collection.find({}).toArray();
+
+            //send polls back to the client
+            res.send(pollDocs);
+
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
+        finally {
+            await client.close();
+        }
     }
 
 }
