@@ -44,6 +44,7 @@ module.exports = {
             console.log(err.stack);
         }
         finally {
+            res.sendStatus(200);
             await client.close();
         }
     },
