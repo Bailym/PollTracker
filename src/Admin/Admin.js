@@ -50,9 +50,34 @@ function Admin() {
         let parties = [];
 
         for (var i = 0; i < partyComponents.length; i++) {
+            
+            //get the correct colour for the party (This could be a dedicated document property once/if a Party collection is created)
+            let party = e.target["party" + i].value;
+            let fillColour = "#9fa39d";
+
+            if(party === "CON") {
+                fillColour = "#0958b3";
+            }
+            else if(party === "LAB") {
+                fillColour = "#ff0000";
+            }
+            else if(party === "LDEM") {
+                fillColour = "#ff8812";
+            }
+            else if(party === "SNP") {
+                fillColour = "#ebeb02"
+            }
+            else if(party === "GRN") {
+                fillColour = "#02ed39"
+            }
+            else if(party === "REFUK") {
+                fillColour = "#5cdee0"
+            }
+
             parties.push({
                 Party: e.target["party" + i].value,
-                Points: e.target["points" + i].value
+                Points: e.target["points" + i].value,
+                fill: fillColour
             })
         }
 
