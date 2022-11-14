@@ -1,7 +1,7 @@
-import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, VStack, Box, StackDivider, IconButton, Button, Form, Divider } from '@chakra-ui/react'
+import { FormControl, FormLabel, Input, VStack, Box, Button, Divider, IconButton } from '@chakra-ui/react'
 import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Container, Select, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 
@@ -36,7 +36,7 @@ function Admin() {
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Points</FormLabel>
-                <NumberInput defaultValue={0} min={0} max={100} name={"points" + partyComponents.length}>
+                <NumberInput defaultValue={0} min={1} max={100} name={"points" + partyComponents.length}>
                     <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
