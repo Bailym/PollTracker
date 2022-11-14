@@ -1,4 +1,4 @@
-import {Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import Moment from 'react-moment';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -27,7 +27,7 @@ function PollCard(props) {
                     <XAxis dataKey="Party" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="Points" fill="#82ca9d" />
+                    <Bar dataKey="Points" />
                 </BarChart>
             </ResponsiveContainer>
         </div>
@@ -35,4 +35,3 @@ function PollCard(props) {
 }
 
 export default PollCard;
-

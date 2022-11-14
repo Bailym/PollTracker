@@ -108,7 +108,7 @@ function Admin() {
 
                 parties.push({
                     Party: e.target["party" + i].value,
-                    Points: e.target["points" + i].value,
+                    Points: parseInt(e.target["points" + i].value),
                     fill: fillColour
                 })
 
