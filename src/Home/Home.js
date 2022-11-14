@@ -34,12 +34,12 @@ function Home() {
   }, []);
 
   return (
-    <Flex>
-      <Box flex="2" height="92vh" margin="2vh" bgColor="#E5F3F4" overflowY="scroll">
+    <Flex height="95vh">
+      <Box flex="2" height="90vh" margin="2vh" bgColor="#E5F3F4" overflowY="scroll">
         {pollCards}
       </Box>
       <Box flex="4" margin="2vh">
-        <Flex height="92vh" flexDir="column" justify="center">
+        <Flex height="90vh" flexDir="column" justify="center">
           <Box flex="1" margin="0 1vw 1vw 1vw" bgColor="#E5F3F4">
 
 
