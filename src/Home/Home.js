@@ -34,7 +34,7 @@ function Home() {
   }, []);
 
   return (
-    <Flex height="95vh">
+    <Flex height="95vh" data-testid="home-component">
       <Box flex="2" height="90vh" margin="2vh" bgColor="#E5F3F4" overflowY="scroll">
         {pollCards}
       </Box>
