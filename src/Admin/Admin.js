@@ -19,12 +19,12 @@ function Admin() {
         //create a temp object and push a new party component to it
         let newPartyComponents = partyComponents;
 
-        newPartyComponents.push(<Box key={partyComponents.length} bgColor={partyComponents.length % 2 === 0 ? "#f2fffb" : "#fff"}>
+        newPartyComponents.push(<Box key={partyComponents.length} bgColor={partyComponents.length % 2 === 0 ? "#f2fffb" : "#fff"} data-testid="party-component">
             <Divider />
             <IconButton icon={<MinusIcon />} width="100%" color="#ff0000" onClick={(e) => removeParty(e)} />
             <FormControl isRequired>
                 <FormLabel>Party</FormLabel>
-                <Select placeholder='Party' name={"party" + partyComponents.length}>
+                <Select placeholder='Party' name={"party" + partyComponents.length} data-testid="party-select">
                     <option>CON</option>
                     <option>LAB</option>
                     <option>LDEM</option>
@@ -36,9 +36,9 @@ function Admin() {
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Points</FormLabel>
-                <NumberInput defaultValue={0} min={1} max={100} name={"points" + partyComponents.length}>
-                    <NumberInputField />
-                    <NumberInputStepper>
+                <NumberInput defaultValue={1} min={1} max={100} name={"points" + partyComponents.length}>
+                    <NumberInputField data-testid="points" />
+                    <NumberInputStepper >
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                     </NumberInputStepper>
@@ -164,7 +164,7 @@ function Admin() {
     }
 
     return (
-        <Container>
+        <Container data-testid="admin-form">
             {error ? <Alert status='error'>
                 <AlertIcon />
                 <AlertTitle>{errorText}</AlertTitle>
@@ -176,23 +176,23 @@ function Admin() {
             <form onSubmit={(e) => submitForm(e)}>
                 <FormControl isRequired>
                     <FormLabel>Source</FormLabel>
-                    <Input placeholder='Source' name="source" />
+                    <Input placeholder='Source' name="source" data-testid="source"/>
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Date Published</FormLabel>
-                    <Input type="date" name="datepublished" />
+                    <Input type="date" name="datepublished" data-testid="date-published"/>
                 </FormControl>
                 <FormControl>
                     <FormLabel>Start Date</FormLabel>
-                    <Input type="date" name="startdate" />
+                    <Input type="date" name="startdate" data-testid="start-date" />
                 </FormControl>
                 <FormControl>
                     <FormLabel>End Date</FormLabel>
-                    <Input type="date" name="enddate" />
+                    <Input type="date" name="enddate" data-testid="end-date" />
                 </FormControl>
                 <FormControl>
                     <FormLabel>Changes With</FormLabel>
-                    <Input type="date" name="changeswith" />
+                    <Input type="date" name="changeswith" data-testid="changes-with" />
                 </FormControl>
                 <VStack
                     spacing={4}
@@ -200,7 +200,7 @@ function Admin() {
                     margin="2rem 0"
                 >
                     {partyComponents}
-                    <IconButton aria-label='Search database' icon={<AddIcon />} onClick={() => addParty()} />
+                    <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button"/>
                 </VStack>
                 <Button type="submit">Button</Button>
             </form>

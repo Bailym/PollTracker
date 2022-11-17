@@ -1,12 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import Home from './Home';
-
-/* test('renders learn react link', () => {
-  render(<Home />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-}); */
+import PollCard from '../Components/PollCard/PollCard.js';
 
 
 test("the Home component is rendered", ()=>{
@@ -15,4 +10,3 @@ test("the Home component is rendered", ()=>{
   const homeElement = screen.getByTestId("home-component"); 
   expect(homeElement).toBeInTheDocument();
 })
-
