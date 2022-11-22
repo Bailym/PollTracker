@@ -38,7 +38,7 @@ function PollCard(props) {
                     <Bar dataKey="Points" />
                 </BarChart>
             </ResponsiveContainer>
-            <PollCardModal isOpen={openModal} onClose={()=> onClose()} />
+            <PollCardModal isOpen={openModal} onClose={()=> onClose()} data={props.data} />
         </div>
     )
 }
