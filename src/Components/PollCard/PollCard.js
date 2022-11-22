@@ -1,12 +1,20 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
 import Moment from 'react-moment';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
+import PollCardModal from '../PollCardModal/PollCardModal'
+import { useState } from 'react'
 
 
 function PollCard(props) {
+
+    const [openModal, setOpenModal] = useState(false)
+
+    function onClose(){
+        setOpenModal(false)
+    }
+
     return (
-        <div style={{ background: "rgba(245, 245, 245, 0.75)", boxShadow: "0px 4px 4px 5px rgba(0, 0, 0, 0.1)", width: "90%", height: "30%", margin: "1.5rem auto" }}>
+        <div style={{ background: "rgba(245, 245, 245, 0.75)", boxShadow: "0px 4px 4px 5px rgba(0, 0, 0, 0.1)", width: "90%", height: "30%", margin: "1.5rem auto" }} onClick={() => { setOpenModal(true) }}>
             <Flex>
                 <Box flexDir="row" flex="1" margin="1rem">
                     <Text>{props.data.Source}</Text>
@@ -30,6 +38,7 @@ function PollCard(props) {
                     <Bar dataKey="Points" />
                 </BarChart>
             </ResponsiveContainer>
+            <PollCardModal isOpen={openModal} onClose={()=> onClose()} />
         </div>
     )
 }
