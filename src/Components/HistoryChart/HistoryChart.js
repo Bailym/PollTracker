@@ -19,7 +19,11 @@ function HistoryChart() {
                     tempData = response.data;
                 })
 
-            //update the state with the new poll data
+            //sort the data by date ascending
+            tempData.sort((a, b) => {
+                return new Date(a.DatePublished) - new Date(b.DatePublished);
+            });
+
             setPollData(tempData);
         }
 
@@ -37,7 +41,7 @@ function HistoryChart() {
                     bottom: 5
                 }}
             >
-                <XAxis dataKey="Date" />
+                <XAxis dataKey="DatePublished" />
                 <CartesianGrid strokeDasharray="4 1 2" />
                 <YAxis />
                 <Tooltip />
