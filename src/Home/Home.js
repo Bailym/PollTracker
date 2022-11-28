@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react'
 import axios from 'axios';
 import PollCard from '../Components/PollCard/PollCard.js';
+import HistoryChart from '../Components/HistoryChart/HistoryChart';
 
 
 function Home() {
@@ -41,8 +42,7 @@ function Home() {
       <Box flex="4" margin="2vh">
         <Flex height="90vh" flexDir="column" justify="center">
           <Box flex="1" margin="0 1vw 1vw 1vw" bgColor="#E5F3F4">
-
-
+            <HistoryChart />
           </Box>
           <Box flex="1" margin="1vw 1vw 0 1vw" bgColor="#E5F3F4">
 
