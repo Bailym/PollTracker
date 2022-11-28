@@ -1,5 +1,6 @@
+const { filter } = require("@chakra-ui/react");
 const { MongoClient } = require("mongodb");
-var ObjectId = require('mongodb').ObjectId; 
+var ObjectId = require('mongodb').ObjectId;
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
@@ -45,16 +46,15 @@ module.exports = {
         }
         finally {
             res.sendStatus(200);
-            await client.close();
         }
     },
 
     async GetPoll(req, res) {
         const collection = await Connect(); //connect to the database
-        try{
+        try {
 
             // Find the poll with the id from the GET request 
-            const myDoc = await collection.findOne({"_id": ObjectId(req.params.id)});
+            const myDoc = await collection.findOne({ "_id": ObjectId(req.params.id) });
 
             //send it back to the client
             res.send(myDoc);
@@ -62,17 +62,14 @@ module.exports = {
         catch (err) {
             console.log(err.stack);
         }
-        finally {
-            await client.close();
-        }
     },
 
     async GetAllPolls(req, res) {
         const collection = await Connect(); //connect to the database
-        try{
+        try {
 
             // Find all the polls
-            const pollDocs = await collection.find({}).sort({"DatePublished":-1}).toArray();
+            const pollDocs = await collection.find({}).sort({ "DatePublished": -1 }).toArray();
 
             //send polls back to the client
             res.send(pollDocs);
@@ -81,10 +78,52 @@ module.exports = {
         catch (err) {
             console.log(err.stack);
         }
-        finally {
-            await client.close();
+    },
+
+    async GetPollHistory(req, res) {
+        const collection = await Connect(); //connect to the database
+        try {
+
+            // Find all the polls
+            const pollDocs = await collection.find({},
+                {
+                    projection: {
+                        "Data.Party": 1,
+                        "Data.Points": 1,
+                        "DatePublished": 1,
+                        "_id": 0
+                    }
+                }).sort({ datePublished: -1 }).toArray();
+
+            let pointsGroupedByDate = [];
+
+            /* group the poll data by date in the following format:
+            [
+                {
+                    "DatePublished": "2021-03-01T00:00:00.000Z",
+                    "CON": 40,
+                    "LAB": 30,
+                    ...
+                },
+            ]
+            */
+            pollDocs.forEach(poll => {
+                let pollObject = {};
+                pollObject.DatePublished = poll.DatePublished;
+                poll.Data.forEach(party => {
+                    pollObject[party.Party] = party.Points;
+                })
+                pointsGroupedByDate.push(pollObject);
+            });
+
+            //send polls back to the client
+            res.send(pointsGroupedByDate);
+
+
+        }
+        catch (err) {
+            console.log(err.stack);
         }
     }
-
 }
 
