@@ -1,4 +1,4 @@
-const { filter } = require("@chakra-ui/react");
+const moment = require('moment'); //require
 const { MongoClient } = require("mongodb");
 var ObjectId = require('mongodb').ObjectId;
 const path = require('path')
@@ -116,10 +116,19 @@ module.exports = {
                 pointsGroupedByDate.push(pollObject);
             });
 
+
+            //sort the data by date ascending
+            pointsGroupedByDate.sort((a, b) => {
+                return new Date(a.DatePublished) - new Date(b.DatePublished);
+            });
+
+            //format the date to be more readable
+            pointsGroupedByDate.forEach(item =>{
+                item.DatePublished = moment(item.DatePublished).format('DD/MM/YYYY');
+            })
+
             //send polls back to the client
             res.send(pointsGroupedByDate);
-
-
         }
         catch (err) {
             console.log(err.stack);
