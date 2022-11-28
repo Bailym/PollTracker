@@ -27,8 +27,8 @@ function Home() {
           }
         })
 
-        //update the state with the new poll cards
-        setPollCards(tempPollCards);
+      //update the state with the new poll cards
+      setPollCards(tempPollCards);
     }
 
     getPoll();

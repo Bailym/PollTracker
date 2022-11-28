@@ -72,6 +72,12 @@ function HistoryChart() {
                     stroke="#5cdee0"
                     strokeWidth={3}
                 />
+                <Line
+                    type="linear"
+                    dataKey="SNP"
+                    stroke="#ebeb02"
+                    strokeWidth={3}
+                />
             </LineChart>
         </ResponsiveContainer>)
 }
