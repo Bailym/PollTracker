@@ -74,6 +74,7 @@ function Admin() {
         let startDate = e.target.startdate.value;
         let endDate = e.target.enddate.value;
         let changesWith = e.target.changeswith.value;
+        let sampleSize = e.target.samplesize.value;
 
         let parties = [];
         let pointsTotal = 0;
@@ -149,6 +150,7 @@ function Admin() {
                 startDate: startDate,
                 endDate: endDate,
                 changesWith: changesWith,
+                sampleSize: sampleSize,
                 parties: parties
             })
                 .then(function (response) {
@@ -176,11 +178,11 @@ function Admin() {
             <form onSubmit={(e) => submitForm(e)}>
                 <FormControl isRequired>
                     <FormLabel>Source</FormLabel>
-                    <Input placeholder='Source' name="source" data-testid="source"/>
+                    <Input placeholder='Source' name="source" data-testid="source" />
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Date Published</FormLabel>
-                    <Input type="date" name="datepublished" data-testid="date-published"/>
+                    <Input type="date" name="datepublished" data-testid="date-published" />
                 </FormControl>
                 <FormControl>
                     <FormLabel>Start Date</FormLabel>
@@ -194,13 +196,17 @@ function Admin() {
                     <FormLabel>Changes With</FormLabel>
                     <Input type="date" name="changeswith" data-testid="changes-with" />
                 </FormControl>
+                <FormLabel>Sample Size</FormLabel>
+                <NumberInput min={1} max={99999} name="samplesize">
+                    <NumberInputField data-testid="sample-size" />
+                </NumberInput>
                 <VStack
                     spacing={4}
                     align='stretch'
                     margin="2rem 0"
                 >
                     {partyComponents}
-                    <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button"/>
+                    <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button" />
                 </VStack>
                 <Button type="submit">Button</Button>
             </form>

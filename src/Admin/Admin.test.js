@@ -17,12 +17,14 @@ test("Check required/unrequired fields", () => {
     const startDateInput = screen.getByTestId("start-date");
     const endDateInput = screen.getByTestId("end-date");
     const changesWithInput = screen.getByTestId("changes-with");
+    const sampleSizeInput = screen.getByTestId("sample-size");
 
     expect(sourceInput).toBeRequired();
     expect(datePublishedInput).toBeRequired();
     expect(startDateInput).not.toBeRequired();
     expect(endDateInput).not.toBeRequired();
     expect(changesWithInput).not.toBeRequired();
+    expect(sampleSizeInput).not.toBeRequired();
 })
 
 test("The form cannot be submitted without required fields filled", () => {
@@ -43,7 +45,7 @@ test("Valid Source and Date Published values are accepted", () => {
     const datePublishedInput = screen.getByTestId("date-published");
 
     //set values
-    sourceInput.value= "Test Source";
+    sourceInput.value = "Test Source";
     datePublishedInput.value = "2021-01-01";
 
     //check validity
@@ -71,7 +73,7 @@ test("Clicking the '+' adds controls to enter a party", () => {
     }
 })
 
-test("Party and Point fields are required",()=>{
+test("Party and Point fields are required", () => {
     render(<Admin />)
 
     //the button to add a new party to the form
@@ -93,7 +95,7 @@ test("Party and Point fields are required",()=>{
     })
 })
 
-test("Points values between 1-100 are accepted",()=>{
+test("Points values between 1-100 are accepted", () => {
     render(<Admin />)
 
     //the button to add a new party to the form

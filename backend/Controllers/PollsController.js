@@ -36,6 +36,7 @@ module.exports = {
                 "DatePublished": new Date(req.body.datePublished),
                 "SurveyDate": { "StartDate": new Date(req.body.startDate), "EndDate": new Date(req.body.endDate) },
                 "ChangesWith": new Date(req.body.changesWith),
+                "SampleSize": req.body.sampleSize,
                 "Data": req.body.parties
             }
 
@@ -123,7 +124,7 @@ module.exports = {
             });
 
             //format the date to be more readable
-            pointsGroupedByDate.forEach(item =>{
+            pointsGroupedByDate.forEach(item => {
                 item.DatePublished = moment(item.DatePublished).format('DD/MM/YYYY');
             })
 
