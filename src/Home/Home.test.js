@@ -1,7 +1,23 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import Home from './Home';
-import PollCard from '../Components/PollCard/PollCard.js';
+
+const { ResizeObserver } = window;
+
+beforeEach(() => {
+  //@ts-ignore
+  delete window.ResizeObserver;
+  window.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
+});
+
+afterEach(() => {
+  window.ResizeObserver = ResizeObserver;
+  jest.restoreAllMocks();
+});
 
 
 test("the Home component is rendered", ()=>{
