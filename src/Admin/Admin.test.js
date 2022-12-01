@@ -2,15 +2,67 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Admin from './Admin';
 
+test("The admin form is not shown on load. The password form is shown instead", () => {
+    render(<Admin />)
+
+    const passwordForm = screen.getByTestId("admin-pass-form");
+    expect(passwordForm).toBeInTheDocument();
+
+    const adminForm = screen.queryByTestId("admin-form");
+    expect(adminForm).not.toBeInTheDocument();
+})
+
+test("The admin form is shown when the correct password is entered", () => {
+    render(<Admin />)
+    const passwordForm = screen.getByTestId("admin-pass-form");
+    const passwordInput = screen.getByTestId("admin-pass-input");
+    const submitButton = screen.getByTestId("admin-pass-submit");
+
+    fireEvent.change(passwordInput, { target: { value: process.env.REACT_APP_ADMIN_PASS } });
+    fireEvent.click(submitButton);
+
+    expect(passwordForm).not.toBeInTheDocument();
+
+    const adminForm = screen.getByTestId("admin-form");
+    expect(adminForm).toBeInTheDocument();
+})
+
+
+test("The admin form is not shown when the incorrect password is entered", () => {
+    render(<Admin />)
+    const passwordForm = screen.getByTestId("admin-pass-form");
+    const passwordInput = screen.getByTestId("admin-pass-input");
+    const submitButton = screen.getByTestId("admin-pass-submit");
+
+    fireEvent.change(passwordInput, { target: { value: "wrong password" } });
+    fireEvent.click(submitButton);
+
+    expect(passwordForm).toBeInTheDocument();
+
+    const adminForm = screen.queryByTestId("admin-form");
+    expect(adminForm).not.toBeInTheDocument();
+})
+
+//The following test require the admin password to be correctly entered
+
+function EnterCorrectPassword() {
+    const passwordInput = screen.getByTestId("admin-pass-input");
+    const submitButton = screen.getByTestId("admin-pass-submit");
+
+    fireEvent.change(passwordInput, { target: { value: process.env.REACT_APP_ADMIN_PASS } });
+    fireEvent.click(submitButton);
+}
 
 test("the Admin form is rendered", () => {
     render(<Admin />)
+    EnterCorrectPassword()
     const adminElement = screen.getByTestId("admin-form");
     expect(adminElement).toBeInTheDocument();
 })
 
 test("Check required/unrequired fields", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     const sourceInput = screen.getByTestId("source");
     const datePublishedInput = screen.getByTestId("date-published");
@@ -29,6 +81,7 @@ test("Check required/unrequired fields", () => {
 
 test("The form cannot be submitted without required fields filled", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     //these boxes will be empty (invalid) by default
     const sourceInput = screen.getByTestId("source");
@@ -40,6 +93,7 @@ test("The form cannot be submitted without required fields filled", () => {
 
 test("Valid Source and Date Published values are accepted", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     const sourceInput = screen.getByTestId("source");
     const datePublishedInput = screen.getByTestId("date-published");
@@ -55,6 +109,7 @@ test("Valid Source and Date Published values are accepted", () => {
 
 test("Clicking the '+' adds controls to enter a party", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     //the button to add a new party to the form
     const addPartyButton = screen.getByTestId("add-party-button");
@@ -75,6 +130,7 @@ test("Clicking the '+' adds controls to enter a party", () => {
 
 test("Party and Point fields are required", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     //the button to add a new party to the form
     const addPartyButton = screen.getByTestId("add-party-button");
@@ -97,6 +153,7 @@ test("Party and Point fields are required", () => {
 
 test("Points values between 1-100 are accepted", () => {
     render(<Admin />)
+    EnterCorrectPassword()
 
     //the button to add a new party to the form
     const addPartyButton = screen.getByTestId("add-party-button");
@@ -112,3 +169,7 @@ test("Points values between 1-100 are accepted", () => {
         expect(pointsInput).toBeValid();
     }
 })
+
+
+
+

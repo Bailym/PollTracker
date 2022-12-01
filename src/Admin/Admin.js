@@ -12,6 +12,12 @@ function Admin() {
     const [errorText, setErrorText] = useState("");
     const [success, setSuccess] = useState(false);
     const [successText, setSuccessText] = useState("");
+    const [adminPassword, setAdminPassword] = useState("");
+
+    //update entered password
+    function AdminLogin(){
+        setAdminPassword(document.getElementById("adminpassword").value);
+    }
 
     //runs when + button is clicked
     function addParty() {
@@ -165,53 +171,63 @@ function Admin() {
         }
     }
 
-    return (
-        <Container data-testid="admin-form">
-            {error ? <Alert status='error'>
-                <AlertIcon />
-                <AlertTitle>{errorText}</AlertTitle>
-            </Alert> : null}
-            {success ? <Alert status='success'>
-                <AlertIcon />
-                <AlertTitle>{successText}</AlertTitle>
-            </Alert> : null}
-            <form onSubmit={(e) => submitForm(e)}>
-                <FormControl isRequired>
-                    <FormLabel>Source</FormLabel>
-                    <Input placeholder='Source' name="source" data-testid="source" />
-                </FormControl>
-                <FormControl isRequired>
-                    <FormLabel>Date Published</FormLabel>
-                    <Input type="date" name="datepublished" data-testid="date-published" />
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Start Date</FormLabel>
-                    <Input type="date" name="startdate" data-testid="start-date" />
-                </FormControl>
-                <FormControl>
-                    <FormLabel>End Date</FormLabel>
-                    <Input type="date" name="enddate" data-testid="end-date" />
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Changes With</FormLabel>
-                    <Input type="date" name="changeswith" data-testid="changes-with" />
-                </FormControl>
-                <FormLabel>Sample Size</FormLabel>
-                <NumberInput min={1} max={99999} name="samplesize">
-                    <NumberInputField data-testid="sample-size" />
-                </NumberInput>
-                <VStack
-                    spacing={4}
-                    align='stretch'
-                    margin="2rem 0"
-                >
-                    {partyComponents}
-                    <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button" />
-                </VStack>
-                <Button type="submit">Button</Button>
-            </form>
-        </Container>
-    );
+    //if the admin password is correct, then show the form
+    if (adminPassword === process.env.REACT_APP_ADMIN_PASS) {
+        return (
+            <Container data-testid="admin-form">
+                {error ? <Alert status='error'>
+                    <AlertIcon />
+                    <AlertTitle>{errorText}</AlertTitle>
+                </Alert> : null}
+                {success ? <Alert status='success'>
+                    <AlertIcon />
+                    <AlertTitle>{successText}</AlertTitle>
+                </Alert> : null}
+                <form onSubmit={(e) => submitForm(e)}>
+                    <FormControl isRequired>
+                        <FormLabel>Source</FormLabel>
+                        <Input placeholder='Source' name="source" data-testid="source" />
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Date Published</FormLabel>
+                        <Input type="date" name="datepublished" data-testid="date-published" />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Start Date</FormLabel>
+                        <Input type="date" name="startdate" data-testid="start-date" />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>End Date</FormLabel>
+                        <Input type="date" name="enddate" data-testid="end-date" />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Changes With</FormLabel>
+                        <Input type="date" name="changeswith" data-testid="changes-with" />
+                    </FormControl>
+                    <FormLabel>Sample Size</FormLabel>
+                    <NumberInput min={1} max={99999} name="samplesize">
+                        <NumberInputField data-testid="sample-size" />
+                    </NumberInput>
+                    <VStack
+                        spacing={4}
+                        align='stretch'
+                        margin="2rem 0"
+                    >
+                        {partyComponents}
+                        <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button" />
+                    </VStack>
+                    <Button type="submit">Button</Button>
+                </form>
+            </Container>)
+    }
+    //else show the password form
+    else {
+        return (
+            <Box data-testid="admin-pass-form">
+                <FormLabel>Admin Password:</FormLabel><Input type="password" id="adminpassword" data-testid="admin-pass-input"></Input>
+                <Button onClick={(e) => AdminLogin()} data-testid="admin-pass-submit">Enter</Button>
+            </Box>)
+    }
 }
 
 export default Admin;
