@@ -14,7 +14,7 @@ function PollCard(props) {
     }
 
     return (
-        <div style={{ background: "rgba(245, 245, 245, 0.75)", boxShadow: "0px 4px 4px 5px rgba(0, 0, 0, 0.1)", width: "90%", height: "30%", margin: "1.5rem auto" }} onClick={() => { setOpenModal(true) }}>
+        <Box bg={"rgba(245, 245, 245, 0.75)"} boxShadow={"0px 4px 4px 5px rgba(0, 0, 0, 0.1)"} minW={"90%"} h={["22vh","22vh","30vh"]} margin= {["2rem 1rem","1rem", "1.5rem auto"]}   onClick={() => { setOpenModal(true) }}>
             <Flex>
                 <Box flexDir="row" flex="1" margin="1rem">
                     <Text>{props.data.Source}</Text>
@@ -39,7 +39,7 @@ function PollCard(props) {
                 </BarChart>
             </ResponsiveContainer>
             <PollCardModal isOpen={openModal} onClose={()=> onClose()} data={props.data} />
-        </div>
+        </Box>
     )
 }
 

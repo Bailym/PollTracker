@@ -35,16 +35,16 @@ function Home() {
   }, []);
 
   return (
-    <Flex height="95vh" data-testid="home-component">
-      <Box flex="2" height="90vh" margin="2vh" bgColor="#E5F3F4" overflowY="scroll">
+    <Flex data-testid="home-component" id="homeFlex" flexDir={["column","column","row"]} h={"95vh"}>
+      <Flex id="pollCardsBox" order={1} flex={2} overflowX={["scroll","scroll", "none"]} minH={["30vh", "30vh", "90vh"]} maxH={["30vh", "30vh", "90vh"]} margin={"1vw 2vh"} bgColor={"#E5F3F4"} flexDir={["row", "row","column"]} overflowY={["none","none","scroll"]}>
         {pollCards}
-      </Box>
-      <Box flex="4" margin="2vh">
-        <Flex height="90vh" flexDir="column" justify="center">
-          <Box flex="1" margin="0 1vw 1vw 1vw" bgColor="#E5F3F4">
+      </Flex>
+      <Box id="rightBox" order={2} flex={4} margin={"2vh"}>
+        <Flex height="90vh" flexDir="column" justify="center" >
+          <Box flex="1"  bgColor="#E5F3F4" >
             <HistoryChart />
           </Box>
-          <Box flex="1" margin="1vw 1vw 0 1vw" bgColor="#E5F3F4">
+          <Box flex="1" marginTop="2vw" bgColor="#E5F3F4">
 
           </Box>
         </Flex>
