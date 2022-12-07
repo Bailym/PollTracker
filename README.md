@@ -1,6 +1,8 @@
 # PollTracker
 
-A WIP Project thhat tracks and displays UK votiing intention in a dashboard format.
+Live here: https://bailym-polltracker.herokuapp.com/
+
+A WIP Project that tracks and displays UK votiing intention in a dashboard format.
 
 ## Project Details
 - React.js front end 
