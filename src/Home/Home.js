@@ -1,6 +1,6 @@
 import './Home.css';
 import React, { useState, useEffect } from 'react';
-import { Flex, Box } from '@chakra-ui/react'
+import { Flex, Box, Text } from '@chakra-ui/react'
 import axios from 'axios';
 import PollCard from '../Components/PollCard/PollCard.js';
 import HistoryChart from '../Components/HistoryChart/HistoryChart';
@@ -35,13 +35,17 @@ function Home() {
   }, []);
 
   return (
-    <Flex data-testid="home-component" id="homeFlex" flexDir={["column","column","row"]} h={"95vh"}>
-      <Flex id="pollCardsBox" order={1} flex={2} overflowX={["scroll","scroll", "none"]} minH={["30vh", "30vh", "90vh"]} maxH={["30vh", "30vh", "90vh"]} margin={"1vw 2vh"} bgColor={"#E5F3F4"} flexDir={["row", "row","column"]} overflowY={["none","none","scroll"]}>
-        {pollCards}
+    <Flex data-testid="home-component" id="homeFlex" flexDir={["column", "column", "row"]} h={"95vh"}>
+      <Flex id="pollCardsFlexCol" flexDir={"column"} order={1} flex={2}>
+      <Text textAlign={"center"} fontSize={"2rem"}>Recent Polls</Text>
+        <Flex id="pollCardsBox" overflowX={["scroll", "scroll", "none"]} h={["30vh", "30vh", "90vh"]} margin={"0vw 2vh"} bgColor={"#E5F3F4"} flexDir={["row", "row", "column"]} overflowY={["hidden", "hidden", "scroll"]}>
+          {pollCards}
+        </Flex>
       </Flex>
-      <Box id="rightBox" order={2} flex={4} margin={"2vh"}>
+      <Box id="rightBox" order={2} flex={4} margin={"0vw 2vh"}>
+      <Text textAlign={"center"} fontSize={"2rem"}>Pollling Trend</Text>
         <Flex height="90vh" flexDir="column" justify="center" >
-          <Box flex="1"  bgColor="#E5F3F4" >
+          <Box flex="1" bgColor="#E5F3F4" >
             <HistoryChart />
           </Box>
           <Box flex="1" marginTop="2vw" bgColor="#E5F3F4">
