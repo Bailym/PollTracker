@@ -29,23 +29,26 @@ function Home() {
 
       //update the state with the new poll cards
       setPollCards(tempPollCards);
+
+      //scroll the history chart to the right
+      document.getElementById("historybox").scrollLeft = document.getElementById("historybox").scrollWidth;
     }
 
     getPoll();
   }, []);
 
   return (
-    <Flex data-testid="home-component" id="homeFlex" flexDir={["column", "column", "row"]} h={"95vh"}>
+    <Flex data-testid="home-component" id="homeFlex" flexDir={["column", "column", "row"]} h={"95vh"} overflowX={"hidden"}>
       <Flex id="pollCardsFlexCol" flexDir={"column"} order={1} flex={2}>
       <Text textAlign={"center"} fontSize={"2rem"}>Recent Polls</Text>
         <Flex id="pollCardsBox" overflowX={["scroll", "scroll", "none"]} h={["30vh", "30vh", "90vh"]} margin={"0vw 2vh"} bgColor={"#E5F3F4"} flexDir={["row", "row", "column"]} overflowY={["hidden", "hidden", "scroll"]}>
           {pollCards}
         </Flex>
       </Flex>
-      <Box id="rightBox" order={2} flex={4} margin={"0vw 2vh"}>
+      <Box id="rightBox" order={2} flex={4} margin={"0vw 2vh"} maxW={[null,null,"75vw"]} >
       <Text textAlign={"center"} fontSize={"2rem"}>Pollling Trend</Text>
-        <Flex height="90vh" flexDir="column" justify="center" >
-          <Box flex="1" bgColor="#E5F3F4" >
+        <Flex height="90vh" flexDir="column" justify="center">
+          <Box flex="1" bgColor="#E5F3F4" overflowX={"scroll"} id="historybox">
             <HistoryChart />
           </Box>
           <Box flex="1" marginTop="2vw" bgColor="#E5F3F4">
