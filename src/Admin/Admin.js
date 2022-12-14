@@ -1,7 +1,7 @@
 import { FormControl, FormLabel, Input, VStack, Box, Button, Divider, IconButton } from '@chakra-ui/react'
 import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Container, Select, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
@@ -13,9 +13,25 @@ function Admin() {
     const [success, setSuccess] = useState(false);
     const [successText, setSuccessText] = useState("");
     const [adminPassword, setAdminPassword] = useState("");
+    const [sourceOptions, setSourceOptions] = useState([]);
+
+    useEffect(() => {
+        //retrieve the sources from db
+        async function getSources() {
+            await axios.get("/api/sources/get")
+                .then(response => {
+                    setSourceOptions(response.data.map(source => <option key={source._id} value={source.Name}>{source.Name}</option>));
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
+        getSources();
+    }, [])
 
     //update entered password
-    function AdminLogin(){
+    function AdminLogin() {
         setAdminPassword(document.getElementById("adminpassword").value);
     }
 
@@ -186,7 +202,9 @@ function Admin() {
                 <form onSubmit={(e) => submitForm(e)}>
                     <FormControl isRequired>
                         <FormLabel>Source</FormLabel>
-                        <Input placeholder='Source' name="source" data-testid="source" />
+                        <Select placeholder='Select source' name="source" data-testid="source">
+                            {sourceOptions}
+                        </Select>
                     </FormControl>
                     <FormControl isRequired>
                         <FormLabel>Date Published</FormLabel>

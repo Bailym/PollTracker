@@ -31,18 +31,18 @@ function HistoryChart() {
     }, []);
 
     return (
-        <ResponsiveContainer width={5000}>
+        <ResponsiveContainer width={2000}>
             <LineChart
                 data={pollData}
                 margin={{
                     top: 10, right: 10, left: 0, bottom: 10,
                 }}
             >
+                <Legend align='right' layout='vertical' verticalAlign='middle'/>
                 <XAxis dataKey="DatePublished" />
                 <CartesianGrid strokeDasharray="4 1 2" />
                 <YAxis />
                 <Tooltip />
-                <Legend align='right' layout='vertical' verticalAlign='middle'/>
                 <Line
                     type="linear"
                     dataKey="CON"

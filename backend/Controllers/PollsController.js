@@ -14,8 +14,6 @@ async function Connect() {
     try {
         await client.connect();
         const db = client.db("PollTrackerCluster");
-
-        // Use the collection "people"
         return (db.collection("polls"));
 
     } catch (err) {
