@@ -22,8 +22,8 @@ function Admin() {
                 .then(response => {
                     setSourceOptions(response.data.map(source => <option key={source._id} value={source.Name}>{source.Name}</option>));
                 })
-                .catch(err => {
-                    console.log(err);
+                .catch(error => {
+                    console.log(error);
                 })
         }
 

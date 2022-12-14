@@ -64,14 +64,14 @@ test("Check required/unrequired fields", () => {
     render(<Admin />)
     EnterCorrectPassword()
 
-    const sourceInput = screen.getByTestId("source");
     const datePublishedInput = screen.getByTestId("date-published");
     const startDateInput = screen.getByTestId("start-date");
     const endDateInput = screen.getByTestId("end-date");
     const changesWithInput = screen.getByTestId("changes-with");
     const sampleSizeInput = screen.getByTestId("sample-size");
+    const selectSourceInput = screen.getByTestId("source");
 
-    expect(sourceInput).toBeRequired();
+    expect(selectSourceInput).toBeRequired();
     expect(datePublishedInput).toBeRequired();
     expect(startDateInput).not.toBeRequired();
     expect(endDateInput).not.toBeRequired();
@@ -84,27 +84,30 @@ test("The form cannot be submitted without required fields filled", () => {
     EnterCorrectPassword()
 
     //these boxes will be empty (invalid) by default
-    const sourceInput = screen.getByTestId("source");
+    const selectSourceInput = screen.getByTestId("source");
     const datePublishedInput = screen.getByTestId("date-published");
 
-    expect(sourceInput).toBeInvalid();
+    expect(selectSourceInput).toBeInvalid();
     expect(datePublishedInput).toBeInvalid();
 })
 
-test("Valid Source and Date Published values are accepted", () => {
+test("Valid Date Published values are accepted", () => {
     render(<Admin />)
     EnterCorrectPassword()
 
-    const sourceInput = screen.getByTestId("source");
     const datePublishedInput = screen.getByTestId("date-published");
 
-    //set values
-    sourceInput.value = "Test Source";
     datePublishedInput.value = "2021-01-01";
 
-    //check validity
-    expect(sourceInput).toBeValid();
     expect(datePublishedInput).toBeValid();
+})
+
+test("Source is not selected by default", () => {
+    render(<Admin />)
+    EnterCorrectPassword()
+
+    expect(screen.getByRole('option', { name: 'Select source' }).selected).toBe(true)
+
 })
 
 test("Clicking the '+' adds controls to enter a party", () => {
