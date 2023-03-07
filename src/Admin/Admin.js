@@ -67,11 +67,7 @@ function Admin() {
                 .then(response => {
                     setSourceOptions(response.data.map(source => <option key={source._id} value={source.Name}>{source.Name}</option>));
                 })
-                .catch(error => {
-                    console.log(error);
-                })
         }
-
         getSources();
     }, [])
 
@@ -129,13 +125,7 @@ function Admin() {
     async function submitForm(e) {
         e.preventDefault();
 
-        let pointsRunningTotal = 0;
-
-        partyDetails.forEach(party => {
-            pointsRunningTotal += party.pointsValue
-        });
-
-        let isFormValid = validateForm(e, pointsRunningTotal);
+        let isFormValid = validateForm();
 
         if (isFormValid) {
             setError(false);
@@ -163,7 +153,20 @@ function Admin() {
         return partyDetailsCopyFiltered;    
     }
 
-    function validateForm(e, pointsTotal) {
+    function getPointsTotalFromForm(){
+        let pointsRunningTotal = 0;
+
+        partyDetails.forEach(party => {
+            pointsRunningTotal += party.pointsValue
+        });
+
+        return pointsRunningTotal;
+    }
+
+    function validateForm() {
+
+        let pointsTotal = getPointsTotalFromForm();
+
         if (pointsTotal > 100) {
             setSuccess(false);
             setError(true);
