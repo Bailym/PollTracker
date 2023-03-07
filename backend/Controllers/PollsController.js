@@ -25,23 +25,22 @@ async function Connect() {
 module.exports = {
     async AddPoll(req, res) {
 
-        const collection = await Connect(); //connect to the database
+        const collection = await Connect();
 
         try {
-            //construct a document with poll details
-            let pollDocument = {
-                "Source": req.body.source,
-                "DatePublished": new Date(req.body.datePublished),
-                "SurveyDate": { "StartDate": new Date(req.body.startDate), "EndDate": new Date(req.body.endDate) },
-                "ChangesWith": new Date(req.body.changesWith),
-                "SampleSize": req.body.sampleSize,
-                "Data": req.body.parties
+            let newPollDocumentToAdd = {
+                "Source": req.body.sourceValue,
+                "DatePublished": new Date(req.body.datePublishedValue),
+                "SurveyDate": { "StartDate": new Date(req.body.startDateValue), "EndDate": new Date(req.body.endDate) },
+                "ChangesWith": new Date(req.body.changesWithValue),
+                "SampleSize": req.body.sampleSizeValue,
+                "Data": req.body.partyDetails
             }
 
-            // Insert a single document, wait for promise so we can read it back
-            await collection.insertOne(pollDocument);
+            await collection.insertOne(newPollDocumentToAdd);
         } catch (err) {
             console.log(err.stack);
+            res.sendStatus(500)
         }
         finally {
             res.sendStatus(200);
@@ -87,8 +86,8 @@ module.exports = {
             const pollDocs = await collection.find({},
                 {
                     projection: {
-                        "Data.Party": 1,
-                        "Data.Points": 1,
+                        "Data.partyLabel": 1,
+                        "Data.pointsValue": 1,
                         "DatePublished": 1,
                         "_id": 0
                     }
@@ -110,11 +109,10 @@ module.exports = {
                 let pollObject = {};
                 pollObject.DatePublished = poll.DatePublished;
                 poll.Data.forEach(party => {
-                    pollObject[party.Party] = party.Points;
+                    pollObject[party.partyLabel] = party.pointsValue;
                 })
                 pointsGroupedByDate.push(pollObject);
             });
-
 
             //sort the data by date ascending
             pointsGroupedByDate.sort((a, b) => {
@@ -125,6 +123,8 @@ module.exports = {
             pointsGroupedByDate.forEach(item => {
                 item.DatePublished = moment(item.DatePublished).format('DD/MM/YYYY');
             })
+
+            console.log(pointsGroupedByDate);
 
             //send polls back to the client
             res.send(pointsGroupedByDate);

@@ -1,22 +1,67 @@
-import { FormControl, FormLabel, Input, VStack, Box, Button, Divider, IconButton } from '@chakra-ui/react'
-import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Container, Select, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react'
-import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { FormControl, FormLabel, Input, VStack, Box, Button, Divider, IconButton, Grid, GridItem } from '@chakra-ui/react'
+import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Container, Select, Alert, AlertIcon, AlertTitle, Flex } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
 function Admin() {
+    // Note the use of "fill" for the hex color property. This is because the rechart  component uses the "fill" property to change the colour of the bars on the homepage.
+    const [partyDetails, setPartyDetails] = useState([
+        {
+            partyLabel: "LAB",
+            fill: "#ff0000",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "CON",
+            fill: "#0958b3",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "LDEM",
+            fill: "#ff8812",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "GRN",
+            fill: "#02ed39",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "REF",
+            fill: "#5cdee0",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "SNP",
+            fill: "#ebeb02",
+            pointsValue: 0
+        },
+        {
+            partyLabel: "OTHER",
+            fill: "#9aa09c",
+            pointsValue: 0
+        },
+    ]);
+    const [pollDetails, setPollDetails] = useState({
+        sourceValue: "",
+        datePublishedValue: "",
+        startDateValue: "",
+        endDateValue: "",
+        changesWithValue: "",
+        sampleSizeValue: "",
+    });
 
-    const [partyComponents, setPartyComponents] = useState([]);
+    const [partyPointsInputComponents, setPartyPointsInputComponents] = useState([]);
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState("");
     const [success, setSuccess] = useState(false);
     const [successText, setSuccessText] = useState("");
-    const [adminPassword, setAdminPassword] = useState("");
+    const [enteredAdminPassword, setEnteredAdminPassword] = useState("");
     const [sourceOptions, setSourceOptions] = useState([]);
 
+    /* On mount - Fetch the possible sources from DB */
     useEffect(() => {
-        //retrieve the sources from db
         async function getSources() {
             await axios.get("/api/sources/get")
                 .then(response => {
@@ -30,165 +75,105 @@ function Admin() {
         getSources();
     }, [])
 
-    //update entered password
-    function AdminLogin() {
-        setAdminPassword(document.getElementById("adminpassword").value);
-    }
+    /* After sources are fetched - Create the party points input components */
+    useEffect(() => {
+        let partyPointsInputComponents = [];
 
-    //runs when + button is clicked
-    function addParty() {
-
-        //create a temp object and push a new party component to it
-        let newPartyComponents = partyComponents;
-
-        newPartyComponents.push(<Box key={partyComponents.length} bgColor={partyComponents.length % 2 === 0 ? "#f2fffb" : "#fff"} data-testid="party-component">
-            <Divider />
-            <IconButton icon={<MinusIcon />} width="100%" color="#ff0000" onClick={(e) => removeParty(e)} />
-            <FormControl isRequired>
-                <FormLabel>Party</FormLabel>
-                <Select placeholder='Party' name={"party" + partyComponents.length} data-testid="party-select">
-                    <option>CON</option>
-                    <option>LAB</option>
-                    <option>LDEM</option>
-                    <option>GRN</option>
-                    <option>REFUK</option>
-                    <option>SNP</option>
-                    <option>OTHER</option>
-                </Select>
-            </FormControl>
-            <FormControl isRequired>
-                <FormLabel>Points</FormLabel>
-                <NumberInput defaultValue={1} min={1} max={100} name={"points" + partyComponents.length}>
-                    <NumberInputField data-testid="points" />
-                    <NumberInputStepper >
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
-            </FormControl>
-        </Box>)
-
-        //update state 
-        setPartyComponents([...newPartyComponents]);
-    }
-
-    //remove an added party component
-    function removeParty(e) {
-
-        //start with the immediate parent node. This will differ depending on which part of the button is clicked since the button has children inside it.
-        let nodeToRemove = e.target.parentNode;
-
-        //if the parent node is not a div, i.e. you have clicked the icon or svg inside the button, then get the parent of the parent node.
-        while (nodeToRemove.tagName !== "DIV") {
-            nodeToRemove = nodeToRemove.parentNode;
+        for (let i = 0; i < partyDetails.length; i++) {
+            let currentParty = partyDetails[i].partyLabel;
+            let currentPartyHexValue = partyDetails[i].fill;
+            partyPointsInputComponents.push(
+                <GridItem key={i} bgColor={currentPartyHexValue} borderRadius="10px">
+                    <FormControl>
+                        <FormLabel textAlign="center">{currentParty}</FormLabel>
+                        <NumberInput min={0} max={100} bgColor="#fff" id={`points${currentParty}`}>
+                            <NumberInputField data-testid="points-lab" borderTopRadius="0" />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                    </FormControl>
+                </GridItem>
+            )
         }
+        setPartyPointsInputComponents(partyPointsInputComponents);
+    }, [sourceOptions, partyDetails])
 
-        nodeToRemove.remove();
+    /* On each update - Update state with current values */
+    useEffect(() => {
+
+        let partyDetailsCopy = partyDetails;
+
+        partyDetailsCopy.forEach(party => {
+            let currentPointsValue = document.getElementById(`points${party.partyLabel}`) ? document.getElementById(`points${party.partyLabel}`).value : 0;
+            party.pointsValue = parseInt(currentPointsValue);
+        });
+
+        setPartyDetails(partyDetailsCopy);
+        setPollDetails({
+            sourceValue: document.getElementById("source") ? document.getElementById("source").value : "",
+            datePublishedValue: document.getElementById("datePublished") ? document.getElementById("datePublished").value : "",
+            startDateValue: document.getElementById("startDate") ? document.getElementById("startDate").value : "",
+            endDateValue: document.getElementById("endDate") ? document.getElementById("endDate").value : "",
+            changesWithValue: document.getElementById("changesWith") ? document.getElementById("changesWith").value : "",
+            sampleSizeValue: document.getElementById("sampleSize") ? document.getElementById("sampleSize").value : "",
+        });
+    }, )
+    
+
+    function adminLoginAttempt() {
+        setEnteredAdminPassword(document.getElementById("adminpassword").value);
     }
 
-    //Handles form submit 
     async function submitForm(e) {
-        e.preventDefault(); //prevent refresh
+        e.preventDefault();
 
-        //get the form data
-        let source = e.target.source.value;
-        let datePublished = e.target.datepublished.value;
-        let startDate = e.target.startdate.value;
-        let endDate = e.target.enddate.value;
-        let changesWith = e.target.changeswith.value;
-        let sampleSize = e.target.samplesize.value;
+        let pointsRunningTotal = 0;
 
-        let parties = [];
-        let pointsTotal = 0;
-        let selectedParties = [];
+        partyDetails.forEach(party => {
+            pointsRunningTotal += party.pointsValue
+        });
 
-        for (var i = 0; i < partyComponents.length; i++) {
+        let isFormValid = validateForm(e, pointsRunningTotal);
 
-            if (e.target["party" + i]) {
-                //get the correct colour for the party (This could be a dedicated document property once/if a Party collection is created)
-                let party = e.target["party" + i].value;
-                let fillColour = "#9fa39d";
+        if (isFormValid) {
+            setError(false);
+            let PartyDetailsNullRemoved = removeNullParties();
 
-                //Hardcoded party colours BAD
-                if (party === "CON") {
-                    fillColour = "#0958b3";
-                }
-                else if (party === "LAB") {
-                    fillColour = "#ff0000";
-                }
-                else if (party === "LDEM") {
-                    fillColour = "#ff8812";
-                }
-                else if (party === "SNP") {
-                    fillColour = "#ebeb02"
-                }
-                else if (party === "GRN") {
-                    fillColour = "#02ed39"
-                }
-                else if (party === "REFUK") {
-                    fillColour = "#5cdee0"
-                }
+            let pollDetailsToSend = pollDetails;
+            pollDetailsToSend.partyDetails = PartyDetailsNullRemoved;
 
-                parties.push({
-                    Party: e.target["party" + i].value,
-                    Points: parseInt(e.target["points" + i].value),
-                    fill: fillColour
-                })
-
-                //Keep a running total of the points
-                pointsTotal += parseInt(e.target["points" + i].value)
-
-                //Keep a list of the selected parties
-                selectedParties.push(e.target["party" + i].value);
-            }
-        }
-
-        let formValid = true;
-
-        //if the total points is over 100, then show an error
-        if (pointsTotal > 100) {
-            setSuccess(false);
-            setError(true);
-            setErrorText("Total points cannot be over 100");
-            formValid = false;
-        }
-
-        //if selectedParties contains the same party more than once, then show an error
-        if (selectedParties.length !== new Set(selectedParties).size) {
-            setSuccess(false);
-            setError(true);
-            setErrorText("You cannot select the same party more than once");
-            formValid = false;
-        }
-
-        //if all checks pass, then submit the form
-        if (formValid) {
-            setError(false); //clear any previous errors
-
-            //send the data to the server using axios, log to console if successful
-            await axios.post("/api/polls/add", {
-                source: source,
-                datePublished: datePublished,
-                startDate: startDate,
-                endDate: endDate,
-                changesWith: changesWith,
-                sampleSize: sampleSize,
-                parties: parties
-            })
+            await axios.post("/api/polls/add", pollDetailsToSend)
                 .then(function (response) {
                     setSuccess(true);
                     setSuccessText("Poll added successfully");
-                    //clear the form
                     e.target.reset();
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    setError(true);
+                    setErrorText("Error adding poll");
                 });
         }
     }
 
-    //if the admin password is correct, then show the form
-    if (adminPassword === process.env.REACT_APP_ADMIN_PASS) {
+    function removeNullParties(){
+        let partyDetailsCopy = partyDetails;
+        let partyDetailsCopyFiltered = partyDetailsCopy.filter(party => !isNaN(party.pointsValue));
+        return partyDetailsCopyFiltered;    
+    }
+
+    function validateForm(e, pointsTotal) {
+        if (pointsTotal > 100) {
+            setSuccess(false);
+            setError(true);
+            setErrorText("Total points cannot be over 100");
+            return false
+        }
+        return true
+    }
+
+    if (enteredAdminPassword === process.env.REACT_APP_ADMIN_PASS) {
         return (
             <Container data-testid="admin-form">
                 {error ? <Alert status='error'>
@@ -202,48 +187,46 @@ function Admin() {
                 <form onSubmit={(e) => submitForm(e)}>
                     <FormControl isRequired>
                         <FormLabel>Source</FormLabel>
-                        <Select placeholder='Select source' name="source" data-testid="source">
+                        <Select placeholder='Select source' id="source" data-testid="source">
                             {sourceOptions}
                         </Select>
                     </FormControl>
                     <FormControl isRequired>
                         <FormLabel>Date Published</FormLabel>
-                        <Input type="date" name="datepublished" data-testid="date-published" />
+                        <Input type="date" id="datePublished" data-testid="date-published" />
                     </FormControl>
-                    <FormControl>
-                        <FormLabel>Start Date</FormLabel>
-                        <Input type="date" name="startdate" data-testid="start-date" />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>End Date</FormLabel>
-                        <Input type="date" name="enddate" data-testid="end-date" />
-                    </FormControl>
+                    <Flex flexDir="row">
+                        <FormControl flex="1">
+                            <FormLabel>Start Date</FormLabel>
+                            <Input type="date" id="startDate" data-testid="start-date" />
+                        </FormControl>
+                        <FormControl flex="1">
+                            <FormLabel>End Date</FormLabel>
+                            <Input type="date" id="endDate" data-testid="end-date" />
+                        </FormControl>
+                    </Flex>
                     <FormControl>
                         <FormLabel>Changes With</FormLabel>
-                        <Input type="date" name="changeswith" data-testid="changes-with" />
+                        <Input type="date" id="changesWith" data-testid="changes-with" />
                     </FormControl>
                     <FormLabel>Sample Size</FormLabel>
-                    <NumberInput min={1} max={99999} name="samplesize">
+                    <NumberInput min={1} max={99999} id="sampleSize">
                         <NumberInputField data-testid="sample-size" />
                     </NumberInput>
-                    <VStack
-                        spacing={4}
-                        align='stretch'
-                        margin="2rem 0"
-                    >
-                        {partyComponents}
-                        <IconButton icon={<AddIcon />} onClick={() => addParty()} data-testid="add-party-button" />
-                    </VStack>
-                    <Button type="submit">Button</Button>
+                    <Grid gridTemplateColumns="repeat(3,1fr)" gridTemplateRows="repeat(3,1fr)" gap="3" marginTop="1rem">
+                        {partyPointsInputComponents}
+                        <GridItem colSpan="2">
+                            <Button type="submit" width="100%" height="100%">Submit</Button>
+                        </GridItem>
+                    </Grid>
                 </form>
             </Container>)
     }
-    //else show the password form
     else {
         return (
             <Box data-testid="admin-pass-form">
                 <FormLabel>Admin Password:</FormLabel><Input type="password" id="adminpassword" data-testid="admin-pass-input"></Input>
-                <Button onClick={(e) => AdminLogin()} data-testid="admin-pass-submit">Enter</Button>
+                <Button onClick={(e) => adminLoginAttempt()} data-testid="admin-pass-submit">Enter</Button>
             </Box>)
     }
 }

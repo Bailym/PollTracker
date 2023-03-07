@@ -32,10 +32,10 @@ function PollCard(props) {
                         bottom: 60,
                     }}
                     data={props.data.Data}>
-                    <XAxis dataKey="Party" />
+                    <XAxis dataKey="partyLabel" label/>
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="Points" />
+                    <Bar dataKey="pointsValue" name="Points" />
                 </BarChart>
             </ResponsiveContainer>
             <PollCardModal isOpen={openModal} onClose={()=> onClose()} data={props.data} />

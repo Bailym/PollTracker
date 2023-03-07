@@ -43,19 +43,15 @@ module.exports = {
 
     },
 
-    async GetSources(req, res) {
-        const collection = await Connect(); //connect to the database
+    async GetAllSources(request, response) {
+        const collection = await Connect();
         try {
-
-            // Find the poll with the id from the GET request 
-            const sourcesObj = await collection.find({}).toArray();
-
-            //send it back to the client
-            res.send(sourcesObj);
+            const allFoundSources = await collection.find({}).toArray();
+            response.send(allFoundSources);
         }
         catch (err) {
             console.log(err.stack);
-            res.sendStatus(500);
+            response.sendStatus(500);
         }
     }
 }

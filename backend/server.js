@@ -15,7 +15,7 @@ app.post('/api/polls/add', pollsController.AddPoll);  //adds a new poll
 app.get('/api/polls/get/:id', pollsController.GetPoll);  //retreives a poll by id
 app.get("/api/polls/get", pollsController.GetAllPolls); //retreives all polls"
 app.get("/api/polls/gethistory", pollsController.GetPollHistory); //retreives all polls"
-app.get("/api/sources/get", sourcesController.GetSources); //retreives all polls"
+app.get("/api/sources/get", sourcesController.GetAllSources); //retreives all polls"
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
 

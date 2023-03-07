@@ -19,11 +19,6 @@ function HistoryChart() {
                     tempData = response.data;
                 })
 
-            //sort the data by date ascending
-            tempData.sort((a, b) => {
-                return new Date(a.DatePublished) - new Date(b.DatePublished);
-            });
-
             setPollData(tempData);
         }
 
@@ -69,7 +64,7 @@ function HistoryChart() {
                 />
                 <Line
                     type="linear"
-                    dataKey="REFUK"
+                    dataKey="REF"
                     stroke="#5cdee0"
                     strokeWidth={3}
                 />
