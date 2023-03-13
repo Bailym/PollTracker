@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 function Admin() {
-    // Note the use of "fill" for the hex color property. This is because the rechart  component uses the "fill" property to change the colour of the bars on the homepage.
+    // Note the use of "fill" for the hex color property. This is because the rechart component uses the "fill" property to change the colour of the bars on the homepage.
     const [partyDetails, setPartyDetails] = useState([
         {
             partyLabel: "LAB",
@@ -96,9 +96,11 @@ function Admin() {
         setPartyPointsInputComponents(partyPointsInputComponents);
     }, [sourceOptions, partyDetails])
 
-    /* On each update - Update state with current values */
-    useEffect(() => {
+    function adminLoginAttempt() {
+        setEnteredAdminPassword(document.getElementById("adminpassword").value);
+    }
 
+    function updateStateWithPollDetails() {
         let partyDetailsCopy = partyDetails;
 
         partyDetailsCopy.forEach(party => {
@@ -108,85 +110,91 @@ function Admin() {
 
         setPartyDetails(partyDetailsCopy);
         setPollDetails({
-            sourceValue: document.getElementById("source") ? document.getElementById("source").value : "",
-            datePublishedValue: document.getElementById("datePublished") ? document.getElementById("datePublished").value : "",
-            startDateValue: document.getElementById("startDate") ? document.getElementById("startDate").value : "",
-            endDateValue: document.getElementById("endDate") ? document.getElementById("endDate").value : "",
-            changesWithValue: document.getElementById("changesWith") ? document.getElementById("changesWith").value : "",
-            sampleSizeValue: document.getElementById("sampleSize") ? document.getElementById("sampleSize").value : "",
+            sourceValue: document.getElementById("source").value,
+            datePublishedValue: document.getElementById("datePublished").value,
+            startDateValue: document.getElementById("startDate").value,
+            endDateValue: document.getElementById("endDate").value,
+            changesWithValue: document.getElementById("changesWith").value,
+            sampleSizeValue: document.getElementById("sampleSize").value
         });
-    }, )
-    
-
-    function adminLoginAttempt() {
-        setEnteredAdminPassword(document.getElementById("adminpassword").value);
     }
 
     async function submitForm(e) {
         e.preventDefault();
-
+        updateStateWithPollDetails();
+        let PartyDetailsNullRemoved = removeNullParties();
         let isFormValid = validateForm();
 
         if (isFormValid) {
             setError(false);
-            let PartyDetailsNullRemoved = removeNullParties();
-
             let pollDetailsToSend = pollDetails;
             pollDetailsToSend.partyDetails = PartyDetailsNullRemoved;
 
             await axios.post("/api/polls/add", pollDetailsToSend)
                 .then(function (response) {
-                    setSuccess(true);
-                    setSuccessText("Poll added successfully");
-                    e.target.reset();
+                    showSuccess("Poll added successfully");
+                    resetFormInputs(e);
                 })
                 .catch(function (error) {
-                    setError(true);
-                    setErrorText("Error adding poll");
+                    showError("Error adding poll");
                 });
         }
     }
 
-    function removeNullParties(){
-        let partyDetailsCopy = partyDetails;
-        let partyDetailsCopyFiltered = partyDetailsCopy.filter(party => !isNaN(party.pointsValue));
-        return partyDetailsCopyFiltered;    
-    }
-
-    function getPointsTotalFromForm(){
-        let pointsRunningTotal = 0;
-
+    function resetFormInputs(e) {
+        e.target.reset();
         partyDetails.forEach(party => {
-            pointsRunningTotal += party.pointsValue
+            document.getElementById(`points${party.partyLabel}`).value = null
         });
-
-        return pointsRunningTotal;
     }
 
     function validateForm() {
+        let isFormValid = true;
 
-        let pointsTotal = getPointsTotalFromForm();
-
-        if (pointsTotal > 100) {
-            setSuccess(false);
-            setError(true);
-            setErrorText("Total points cannot be over 100");
-            return false
+        if (!checkPointsTotalInRange()) {
+            isFormValid = false;
+            showError("Points total must be between 1 and 100");
+            return isFormValid;
         }
-        return true
+
+        return isFormValid;
+    }
+
+    function removeNullParties() {
+        let partyDetailsCopy = partyDetails;
+        let partyDetailsCopyFiltered = partyDetailsCopy.filter(party => !isNaN(party.pointsValue));
+        return partyDetailsCopyFiltered;
+    }
+
+    function checkPointsTotalInRange() {
+        let pointsRunningTotal = 0;
+
+        partyDetails.forEach(party => {
+            if (!isNaN(party.pointsValue)) {
+                pointsRunningTotal += party.pointsValue
+            }
+        });
+
+        let isPointsTotalInRange = pointsRunningTotal > 0 && pointsRunningTotal <= 100;
+
+        return isPointsTotalInRange
+    }
+
+    function showError(errorText) {
+        setSuccess(false);
+        setError(true);
+        setErrorText(errorText);
+    }
+
+    function showSuccess(successText) {
+        setError(false);
+        setSuccess(true);
+        setSuccessText(successText);
     }
 
     if (enteredAdminPassword === process.env.REACT_APP_ADMIN_PASS) {
         return (
             <Container data-testid="admin-form">
-                {error ? <Alert status='error'>
-                    <AlertIcon />
-                    <AlertTitle>{errorText}</AlertTitle>
-                </Alert> : null}
-                {success ? <Alert status='success'>
-                    <AlertIcon />
-                    <AlertTitle>{successText}</AlertTitle>
-                </Alert> : null}
                 <form onSubmit={(e) => submitForm(e)}>
                     <FormControl isRequired>
                         <FormLabel>Source</FormLabel>
@@ -216,13 +224,21 @@ function Admin() {
                     <NumberInput min={1} max={99999} id="sampleSize">
                         <NumberInputField data-testid="sample-size" />
                     </NumberInput>
-                    <Grid gridTemplateColumns="repeat(3,1fr)" gridTemplateRows="repeat(3,1fr)" gap="3" marginTop="1rem">
+                    <Grid gridTemplateColumns="repeat(3,1fr)" gridTemplateRows="repeat(3,1fr)" gap="3" marginTop="1rem" marginBottom="2rem">
                         {partyPointsInputComponents}
                         <GridItem colSpan="2">
-                            <Button type="submit" width="100%" height="100%">Submit</Button>
+                            <Button type="submit" width="100%" height="100%" data-testid="add-poll-submit">Add Poll</Button>
                         </GridItem>
                     </Grid>
                 </form>
+                {error ? <Alert status='error'>
+                    <AlertIcon />
+                    <AlertTitle>{errorText}</AlertTitle>
+                </Alert> : null}
+                {success ? <Alert status='success'>
+                    <AlertIcon />
+                    <AlertTitle>{successText}</AlertTitle>
+                </Alert> : null}
             </Container>)
     }
     else {
