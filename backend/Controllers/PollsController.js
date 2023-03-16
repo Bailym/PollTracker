@@ -25,19 +25,21 @@ async function Connect() {
 module.exports = {
     async AddPoll(req, res) {
 
-        const collection = await Connect();
+        const pollsCollection = await Connect();
 
         try {
+
+            let partyDetailsZeroPointsRemoved = req.body.partyDetails.filter(party => party.pointsValue !== null);
             let newPollDocumentToAdd = {
                 "Source": req.body.sourceValue,
                 "DatePublished": new Date(req.body.datePublishedValue),
                 "SurveyDate": { "StartDate": new Date(req.body.startDateValue), "EndDate": new Date(req.body.endDate) },
                 "ChangesWith": new Date(req.body.changesWithValue),
                 "SampleSize": req.body.sampleSizeValue,
-                "Data": req.body.partyDetails
+                "Data": partyDetailsZeroPointsRemoved
             }
 
-            await collection.insertOne(newPollDocumentToAdd);
+            await pollsCollection.insertOne(newPollDocumentToAdd);
         } catch (err) {
             console.log(err.stack);
             res.sendStatus(500)
