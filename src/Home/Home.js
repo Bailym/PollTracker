@@ -52,7 +52,8 @@ function Home() {
           <Box flex="1" bgColor="#E5F3F4" overflowX={"scroll"} id="historybox">
             <HistoryChart />
           </Box>
-          <Box flex="1" marginTop="2vw" bgColor="#E5F3F4" data-testid="rss-pane-content">
+          <Text textAlign={"center"} fontSize={"2rem"}>News</Text>
+          <Box flex="1" bgColor="#E5F3F4" data-testid="rss-pane-content" overflowY={"scroll"} padding={"1rem"}>
             <RSSFeedPane />
           </Box>
         </Flex>

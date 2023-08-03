@@ -22,7 +22,7 @@ module.exports = {
             res.sendStatus(500)
         }
         finally {
-            var parsedRssData = parseRSSFeedData(RSSFeedData.data);
+            var parsedRssData = await parseRSSFeedData(RSSFeedData.data);
             res.send(parsedRssData);
         }
     }
