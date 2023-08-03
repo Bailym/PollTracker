@@ -11,11 +11,11 @@ const pollsController = require("./Controllers/PollsController");
 const sourcesController = require('./Controllers/sourcesController');
 
 //Polls endpoints
-app.post('/api/polls/add', pollsController.AddPoll);  //adds a new poll
-app.get('/api/polls/get/:id', pollsController.GetPoll);  //retreives a poll by id
-app.get("/api/polls/get", pollsController.GetAllPolls); //retreives all polls"
-app.get("/api/polls/gethistory", pollsController.GetPollHistory); //retreives all polls"
-app.get("/api/sources/get", sourcesController.GetAllSources); //retreives all polls"
+app.post('/api/polls/add', pollsController.AddNewPollToCollection);
+app.get('/api/polls/get/:id', pollsController.GetPollByIdArg);  
+app.get("/api/polls/get", pollsController.GetAllPolls); 
+app.get("/api/polls/gethistory", pollsController.GetPollingTrendData); 
+app.get("/api/sources/get", sourcesController.GetAllSources);
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
 
