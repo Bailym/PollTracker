@@ -1,5 +1,13 @@
 const axios = require('axios');
 const RSSFeedURL = "http://feeds.bbci.co.uk/news/politics/rss.xml"
+let RSSParser = require('rss-parser');
+
+
+async function parseRSSFeedData(data) {
+    let rssParser = new RSSParser();
+    let rssFeedData = await rssParser.parseURL(RSSFeedURL);
+    return rssFeedData
+}
 
 
 module.exports = {
@@ -14,8 +22,8 @@ module.exports = {
             res.sendStatus(500)
         }
         finally {
-            req.send(RSSFeedData);
-            res.sendStatus(200);
+            var parsedRssData = parseRSSFeedData(RSSFeedData.data);
+            res.send(parsedRssData);
         }
     }
 }

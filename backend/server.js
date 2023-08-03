@@ -17,7 +17,7 @@ app.get('/api/polls/get/:id', pollsController.GetPollByIdArg);
 app.get("/api/polls/get", pollsController.GetAllPolls); 
 app.get("/api/polls/gethistory", pollsController.GetPollingTrendData); 
 app.get("/api/sources/get", sourcesController.GetAllSources);
-app.get("api/rss/get", RSSController.GetRSSFeed);
+app.get("/api/rss/get", RSSController.GetRSSFeed);
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
 

@@ -26,3 +26,12 @@ test("the Home component is rendered", ()=>{
   const homeElement = screen.getByTestId("home-component"); 
   expect(homeElement).toBeInTheDocument();
 })
+
+test("the RSSFeedPane component is rendered in the rss-feed-pane-content div", () => {
+  render(<Home />)
+  const rssFeedPaneComponent = screen.getByTestId("rss-feed-pane-component");
+  const rssFeedPaneContent = screen.getByTestId("rss-pane-content");
+  expect(rssFeedPaneComponent).toBeInTheDocument();
+  expect(rssFeedPaneContent).toBeInTheDocument();
+}
+)

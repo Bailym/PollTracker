@@ -4,6 +4,7 @@ import { Flex, Box, Text } from '@chakra-ui/react'
 import axios from 'axios';
 import PollCard from '../Components/PollCard/PollCard.js';
 import HistoryChart from '../Components/HistoryChart/HistoryChart';
+import RSSFeedPane from '../Components/RSSFeedPane/RSSFeedPane';
 
 
 function Home() {
@@ -51,8 +52,8 @@ function Home() {
           <Box flex="1" bgColor="#E5F3F4" overflowX={"scroll"} id="historybox">
             <HistoryChart />
           </Box>
-          <Box flex="1" marginTop="2vw" bgColor="#E5F3F4">
-
+          <Box flex="1" marginTop="2vw" bgColor="#E5F3F4" data-testid="rss-pane-content">
+            <RSSFeedPane />
           </Box>
         </Flex>
       </Box>
